@@ -1,0 +1,1 @@
+# LPKTA materials seminar
