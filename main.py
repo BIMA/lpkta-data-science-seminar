@@ -19,6 +19,15 @@ def main(request):
     # PROHIBITTED!!!!
     features = bq.query(
         f"SELECT * FROM `my-local-sandbox-355006.lpkta.credit_scoring_features` WHERE id = {user_id}").result().to_dataframe()
+    # RECOMMENDED WAY
+    job_config = bigquery.QueryJobConfig(
+        query_parameters=[
+            bigquery.ScalarQueryParameter("user_id", "INTEGER", user_id)
+        ]
+    )
+    features = bq.query("SELECT * FROM `my-local-sandbox-355006.lpkta.credit_scoring_features` WHERE id = @user_id",
+                        job_config=job_config).result().to_dataframe()
+
     features = features[['annual_income',
                          'monthly_inhand_salary',
                          'num_bank_accounts',
